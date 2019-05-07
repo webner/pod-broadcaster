@@ -1,0 +1,4 @@
+#!/bin/bash
+./build.sh
+docker build -t openshift-registry.internal.catalysts.cc/webner/pod-broadcast .
+docker push openshift-registry.internal.catalysts.cc/webner/pod-broadcast
