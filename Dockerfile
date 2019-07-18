@@ -3,7 +3,7 @@ FROM progrium/busybox
 RUN mkdir -p /app
 WORKDIR /app
 
-ADD pod-broadcaster /app/pod-broadcaster
+ADD pod-broadcast /app/pod-broadcaster
 
 EXPOSE 8080
 

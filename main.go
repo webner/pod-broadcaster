@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -110,6 +111,9 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 
 	ch := make(chan result, len(srvs))
 
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+
 	for _, v := range srvs {
 		go func(target string) {
 
@@ -124,7 +128,8 @@ func aggregateHandler(w http.ResponseWriter, r *http.Request) {
 			url.Host = host
 			fmt.Printf(" %v %v\n", r.Method, url.String())
 
-			req, err := http.NewRequest(r.Method, url.String(), nil)
+			req, err := http.NewRequest(r.Method, url.String(), bytes.NewReader(body))
+			req.Header = r.Header
 			resp, err := client.Do(req)
 
 			r := result{resp.StatusCode, r.Method, target, url.String(), nil}
